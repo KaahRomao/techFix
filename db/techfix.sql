@@ -924,38 +924,3 @@ INSERT INTO entrada_peca (
 INSERT INTO saida_peca (id, id_peca, quantidade, motivo, preco_de_compra, id_tecnico, id_tecnico_cargo, data_saida) VALUES
     (1, 22, 2, 'defeito', 500, 4, 3, '2026-10-17 15:00:00'),
     (2, 34, 5, 'avaria', 80, 5, 3, '2026-10-17 15:30:00');
-
-COMMIT;
-
-/*
-Teste rápido opcional. Execute este bloco separadamente no banco recém-criado.
-Os registros deste teste são revertidos no final.
-
-SAVEPOINT teste_ordem;
-INSERT INTO ordem (
-    id, id_equipamento, defeito_relatado, id_funcionario_abertura,
-    id_funcionario_cargo_abertura, id_tecnico, id_tecnico_cargo
-) VALUES (1000, 1, 'Ordem de teste', 2, 2, 5, 3);
-
-INSERT INTO ordem_situacao (id_ordem, id_nova_situacao, id_tecnico, id_tecnico_cargo)
-VALUES (1000, 3, 5, 3);
-INSERT INTO ordem_servico (id_ordem, id_servico, quantidade_servico, valor_unitario)
-VALUES (1000, 7, 1, 9000);
-INSERT INTO ordem_peca (id_ordem, id_peca, quantidade, valor_unitario, id_tecnico, id_tecnico_cargo)
-VALUES (1000, 17, 2, 2000, 5, 3);
-
-UPDATE ordem SET id_forma_pagamento = 4 WHERE id = 1000;
-INSERT INTO ordem_situacao (id_ordem, id_nova_situacao, id_tecnico, id_tecnico_cargo)
-VALUES (1000, 6, 5, 3);
-
--- Esperado: total 13000, situação 6 e data de fechamento preenchida.
-SELECT valor_total, id_situacao_atual, data_fechamento FROM ordem WHERE id = 1000;
--- Esperado: 1, 3 e 6, com o técnico 5 em todos os registros.
-SELECT id_nova_situacao, id_tecnico FROM ordem_situacao WHERE id_ordem = 1000 ORDER BY id;
--- Esperado: pagamento de 13000 via Pix e saldo 147 para a peça 17.
-SELECT id_forma_pagamento, valor, data_pagamento FROM ordem_pagamento WHERE id_ordem = 1000;
-SELECT estoque_real FROM peca WHERE id = 17;
-
-ROLLBACK TO teste_ordem;
-RELEASE teste_ordem;
-*/
